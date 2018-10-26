@@ -1,0 +1,72 @@
+<div class="container">
+    <div class="form-group">
+        <label for="inputAddress">Subject</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="Rahul Dravid" [(ngModel)]='subject'>
+    </div>
+    <button (click)="searchObject()" type="submit" class="btn btn-primary">Search</button>
+</div>
+<div *ngIf = "true" class="container">
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Label</th>
+          <th scope="col">Description</th>
+          <th scope="col">Select</th>
+        </tr>
+      </thead>
+      <tbody *ngFor = "let result of searchObject$.search">
+        <tr>
+          <td>{{ result.id }}</td>
+          <td>{{ result.label }}</td>
+          <td>{{ result.description }}</td>
+          <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-primary">Go</button></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<div *ngIf = "selector == 'human' " class="container">
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr>
+          <th scope="col">P Property</th>
+          <th scope="col">Q Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Occupation</td>
+          <td>
+              <li *ngFor="let result of occupationName">
+                {{ result.value }}
+                <button (click)="generateQuesReview(result.key,result.value)" type="submit" class="btn btn-primary">Go</button>
+              </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<div *ngIf = "selector == 'human' " class="container">
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr>
+          <th scope="col">Sample Questions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+              <li *ngFor="let result of queryQues">
+                {{ result.QuestionGiven }}
+                <ul>
+                  <li *ngFor="let option of result.Options">
+                    {{ option.OptionGiven }}
+                 </li>
+                </ul>
+              </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-primary">Generate Questions</button>
+</div>
