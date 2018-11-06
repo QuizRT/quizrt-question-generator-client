@@ -185,7 +185,7 @@ export class GeneratorComponent implements OnInit {
       topic : this.currentTopic,
       categName : this.currentCategName,
       topicName : this.currentTopicName
-    }
+    };
     this.wikidata.postEntityObject(CategTopic).subscribe(
       data => {
         console.log(data)
