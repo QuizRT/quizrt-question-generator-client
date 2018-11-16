@@ -20,12 +20,13 @@
           <td>{{ result.id }}</td>
           <td>{{ result.label }}</td>
           <td>{{ result.description }}</td>
-          <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-primary">Go</button></td>
+          <!-- <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-primary">Go</button></td> -->
+          <td><button (click)="searchEntityNew(result.id)" type="submit" class="btn btn-primary">Go</button></td>
         </tr>
       </tbody>
     </table>
 </div>
-<div *ngIf = "selector == 'human' " class="container">
+<!-- <div *ngIf = "selector == 'human' " class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -45,8 +46,8 @@
         </tr>
       </tbody>
     </table>
-</div>
-<div *ngIf = "selector == 'human' " class="container">
+</div> -->
+<!-- <div *ngIf = "selector == 'human' " class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -69,4 +70,30 @@
       </tbody>
     </table>
     <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-primary">Generate Questions</button>
+</div> -->
+<div class="container">
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr>
+          <th scope="col">P Property</th>
+          <th scope="col">Q Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of arrOfGeneral">
+          <td>{{ result.Subject }}</td>
+          <td>
+              {{ result.Value }}
+              <button (click)="generateQuesReviewNew(result.SubjectId)" type="submit" class="btn btn-primary">Go</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<div *ngIf = "quesTemp == true" class="container">
+  <div class="form-group">
+      <label for="inputAddress">Template</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="Who is the {{option.author}} of {{subject}}?" [(ngModel)]='template'>
+  </div>
+  <button (click)="searchTemplate()" type="submit" class="btn btn-primary">Search</button>
 </div>

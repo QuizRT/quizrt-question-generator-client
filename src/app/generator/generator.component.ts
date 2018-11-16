@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { WikidataService } from '../services/wikidata.service';
-import { QuizRTTemplate, Questions, Options } from './generator.model';
+import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 
 @Component({
   selector: 'app-generator',
@@ -32,7 +32,7 @@ export class GeneratorComponent implements OnInit {
   optionNumber: number = 3
   optionArr = []
 
-  constructor( private wikidata : WikidataService ) { }
+  constructor( private wikidata : WikidataService) { }
 
   ngOnInit() {
   }
@@ -180,16 +180,89 @@ export class GeneratorComponent implements OnInit {
   }
 
   generateQuesPost() {
-    let CategTopic = {
-      categ : this.currentCateg,
-      topic : this.currentTopic,
-      categName : this.currentCategName,
-      topicName : this.currentTopicName
-    };
-    this.wikidata.postEntityObject(CategTopic).subscribe(
+    // let CategTopic = {
+    //   categ : this.currentCateg,
+    //   topic : this.currentTopic,
+    //   categName : this.currentCategName,
+    //   topicName : this.currentTopicName
+    // };
+    var templateObject = new QuizRTTemplate();
+    templateObject.Categ = this.currentCateg;
+    templateObject.Topic = this.currentTopic;
+    templateObject.CategName = this.currentCategName;
+    templateObject.TopicName = this.currentTopicName;
+    this.wikidata.postEntityObject(templateObject).subscribe(
       data => {
         console.log(data)
       }
     )
+  }
+
+  // --------------
+
+  arrOfGeneral = []
+  instanceOfValue : string = ""
+  quesTemp : boolean = false
+  template : string = ""
+
+  searchEntityNew(entityId : string) {
+    
+    this.arrOfGeneral = []
+
+    this.wikidata.getSearchEntityNew(entityId).subscribe(
+      data => {
+        this.searchEntity$ = data
+        for( let i = 0; i < this.searchEntity$.results.bindings.length; i++){
+          var genObject = new General();
+          var idVariable = this.searchEntity$.results.bindings[i].propUrl.value
+          genObject.SubjectId = idVariable.split('/')[5];
+          genObject.Subject = this.searchEntity$.results.bindings[i].propLabel.value
+          if(genObject.Subject=="instance of") {
+            var instanceOfVariable = this.searchEntity$.results.bindings[i].valUrl.value
+            this.instanceOfValue = instanceOfVariable.split('/')[4];
+          }
+          genObject.Value = this.searchEntity$.results.bindings[i].valLabel.value
+          this.arrOfGeneral.push(genObject)
+        }
+
+      }
+    );
+    // subscribe ends here
+  }
+  // search entity new ends here
+
+  // for generating Sample Questions for user review
+  generateQuesReviewNew(currentSubjectId : string) {
+    this.quesTemp = true
+
+    this.queryQues = [] // for storing set of Questions along with Options
+    this.sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+this.instanceOfValue+".?cid wdt:"+currentSubjectId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
+    console.log(this.instanceOfValue+" "+currentSubjectId)// Subscribing to get Questions based on clicked Topic
+    this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
+      data => {
+        this.getQuestion$ = data;
+        // for(let i=0; i < this.getQuestion$.results.bindings.length; i++){          
+
+        //   this.sparQL = "SELECT ?cid ?options WHERE {?cid wdt:P31 wd:Q28640. OPTIONAL {?cid rdfs:label ?options filter (lang(?options) = 'en') . }}Limit "+this.NumberOfQuestions*20+"";
+        //   // Subscribing to get related Options based on clicked Topic for each generated sample Question
+        //   this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
+        //     data => {
+        //       this.getOptions$ = data
+        //       // console.log(this.getOptions$)
+        //       var ques = new Questions()
+        //       ques.QuestionGiven = "What is "+this.getQuestion$.results.bindings[i].personLabel.value+" "+this.currentTopicName+"?";
+        //       ques.Topic = this.currentTopicName
+        //       ques.Categ = entityValue
+        //       ques.Options = this.randomizeOptions(this.getOptions$.results.bindings,entityValue)
+        //       // console.log(ques.Options)
+        //       this.queryQues.push(ques)
+        //     } 
+        //   )
+          
+        // }
+        console.log(data)
+      } 
+    )
+
   }
 }

@@ -18,3 +18,9 @@ export class Options {
     OptionGiven: string;
     IsCorrect: boolean;
 }
+
+export class General {
+    Subject: string;
+    Value: string;
+    SubjectId: string;
+}
