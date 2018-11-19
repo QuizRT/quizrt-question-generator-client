@@ -1,0 +1,11 @@
+services:
+  question-generator-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ".:/QuizRT/usr/src/app"
+      - /QuizRT/usr/src/app/node_modules
+version: "3"
