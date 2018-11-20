@@ -193,17 +193,24 @@ export class GeneratorComponent implements OnInit {
     templateObject.TopicName = this.currentTopicName;
     this.wikidata.postEntityObject(templateObject).subscribe(
       data => {
-        console.log(data)
+        // console.log(data)
       }
     )
   }
 
-  // --------------
+  // -----------------------------------------
 
   arrOfGeneral = []
   instanceOfValue : string = ""
   quesTemp : boolean = false
   template : string = ""
+  getSampleQuestion$: any={}
+  questionObject = []
+  optionObject = []
+  topic : string = ""
+  category : string = ""
+  getOptionId$: any={}
+  getOptionsList$: any={}
 
   searchEntityNew(entityId : string) {
     
@@ -217,9 +224,10 @@ export class GeneratorComponent implements OnInit {
           var idVariable = this.searchEntity$.results.bindings[i].propUrl.value
           genObject.SubjectId = idVariable.split('/')[5];
           genObject.Subject = this.searchEntity$.results.bindings[i].propLabel.value
-          if(genObject.Subject=="instance of") {
+          if(genObject.Subject == "instance of") {
             var instanceOfVariable = this.searchEntity$.results.bindings[i].valUrl.value
-            this.instanceOfValue = instanceOfVariable.split('/')[4];
+            this.instanceOfValue = instanceOfVariable.split('/')[4]
+            this.topic = this.searchEntity$.results.bindings[i].valLabel.value
           }
           genObject.Value = this.searchEntity$.results.bindings[i].valLabel.value
           this.arrOfGeneral.push(genObject)
@@ -232,37 +240,108 @@ export class GeneratorComponent implements OnInit {
   // search entity new ends here
 
   // for generating Sample Questions for user review
-  generateQuesReviewNew(currentSubjectId : string) {
-    this.quesTemp = true
+  generateQuesReviewNew(currentSubjectId : string, currentSubject : string) {
+    this.quesTemp = false
+    this.category = currentSubject
 
     this.queryQues = [] // for storing set of Questions along with Options
     this.sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+this.instanceOfValue+".?cid wdt:"+currentSubjectId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
-    console.log(this.instanceOfValue+" "+currentSubjectId)// Subscribing to get Questions based on clicked Topic
+    // console.log(this.instanceOfValue+" "+currentSubjectId)// Subscribing to get Questions based on clicked Topic
     this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
       data => {
-        this.getQuestion$ = data;
-        // for(let i=0; i < this.getQuestion$.results.bindings.length; i++){          
+        this.getSampleQuestion$ = data
+        this.quesTemp = true
+        // console.log(data)
+      }
+    )
 
-        //   this.sparQL = "SELECT ?cid ?options WHERE {?cid wdt:P31 wd:Q28640. OPTIONAL {?cid rdfs:label ?options filter (lang(?options) = 'en') . }}Limit "+this.NumberOfQuestions*20+"";
-        //   // Subscribing to get related Options based on clicked Topic for each generated sample Question
-        //   this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
-        //     data => {
-        //       this.getOptions$ = data
-        //       // console.log(this.getOptions$)
-        //       var ques = new Questions()
-        //       ques.QuestionGiven = "What is "+this.getQuestion$.results.bindings[i].personLabel.value+" "+this.currentTopicName+"?";
-        //       ques.Topic = this.currentTopicName
-        //       ques.Categ = entityValue
-        //       ques.Options = this.randomizeOptions(this.getOptions$.results.bindings,entityValue)
-        //       // console.log(ques.Options)
-        //       this.queryQues.push(ques)
-        //     } 
-        //   )
+    // Subscribing to get Option Id based on clicked Topic
+    this.wikidata.getSearchObject(currentSubject).subscribe(
+      data => {
+        this.getOptionId$ = data;
+        for(let i=0; i < this.getOptionId$.search.length; i++){
+          if( this.getOptionId$.search[i].id.indexOf('Q') > -1 && this.getOptionId$.search[i].match.text == this.category ) {
+            this.sparQL = "SELECT ?cidLabel WHERE {?cid wdt:P31 wd:"+this.getOptionId$.search[i].id+" .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
+            // Subscribing to get related Options based on clicked Topic for each generated sample Question
+            this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
+              data => {
+                this.getOptionsList$ = data
+                for(let i = 0; i < this.getOptionsList$.results.bindings.length; i++){
+                  this.optionObject.push(this.getOptionsList$.results.bindings[i].cidLabel.value)
+                }
+              } 
+            )
+          }
           
-        // }
-        console.log(data)
+        }
+        // console.log(this.queryQues)
       } 
     )
 
   }
+
+  searchTemplate(){
+    this.questionObject = []
+    var subjectPart = this.template.substring(
+      this.template.lastIndexOf("["),
+      this.template.lastIndexOf("]") + 1
+    )
+    var optionPart = this.template.substring(
+      this.template.lastIndexOf("("),
+      this.template.lastIndexOf(")") + 1
+    )
+    var optionReplacement = this.template.substring(
+      this.template.lastIndexOf("(") + 1,
+      this.template.lastIndexOf(")")
+    )
+    for(let i=0; i < this.getSampleQuestion$.results.bindings.length; i++){
+
+      var ques = new Questions()
+      ques.QuestionGiven = this.template
+                            .replace(subjectPart,this.getSampleQuestion$.results.bindings[i].cidLabel.value)
+                            .replace(optionPart,optionReplacement)
+      ques.Topic = this.topic
+      ques.Categ = this.category
+      // console.log(this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
+      ques.Options = this.randomizeOptionsNew(this.optionObject,this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
+      this.questionObject.push(ques)
+      console.log(ques)
+    }
+  }
+
+  randomizeOptionsNew(getQuestionOptions$ : any[], entityValue : string) {
+    // generating n distinct random numbers
+    let randomNummber: number[] = this.getRandonNumberNew(getQuestionOptions$.length)
+    this.optionArr = []
+    // for(let i=0; i < randomNummber.length; i++) console.log(randomNummber[i])
+    for(let i=0; i < randomNummber.length; i++) {
+      // making check to not get options that is equal to Correct Option
+      if(getQuestionOptions$[randomNummber[i]] != entityValue){
+        var ops = new Options();
+        ops.OptionGiven = getQuestionOptions$[randomNummber[i]]
+        this.optionArr.push(ops)
+      }
+      else
+        this.randomizeOptionsNew(getQuestionOptions$,entityValue)
+    }
+    // Inserting correct option
+    var opsCorrect = new Options()
+    opsCorrect.OptionGiven = entityValue
+    this.optionArr.push(opsCorrect)
+    // shuffling the option to create randomness
+    this.optionArr = this.shuffle(this.optionArr)
+    // console.log(this.optionArr)
+    return this.optionArr
+  }
+
+  getRandonNumberNew(num: number) {
+    var arr = []
+    while(arr.length < this.optionNumber){
+        var randomnumber = Math.floor(Math.random()*(num)) + 1;
+        if(arr.indexOf(randomnumber) > -1) continue;
+        arr[arr.length] = randomnumber;
+    }
+    return arr;
+  }
+
 }

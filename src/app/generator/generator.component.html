@@ -84,7 +84,7 @@
           <td>{{ result.Subject }}</td>
           <td>
               {{ result.Value }}
-              <button (click)="generateQuesReviewNew(result.SubjectId)" type="submit" class="btn btn-primary">Go</button>
+              <button (click)="generateQuesReviewNew(result.SubjectId,result.Subject)" type="submit" class="btn btn-primary">Go</button>
           </td>
         </tr>
       </tbody>
@@ -92,8 +92,32 @@
 </div>
 <div *ngIf = "quesTemp == true" class="container">
   <div class="form-group">
-      <label for="inputAddress">Template</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Who is the {{option.author}} of {{subject}}?" [(ngModel)]='template'>
+      <label for="inputAddress">Template (Type as: "Who is the (option) of [subject]?")</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
   </div>
   <button (click)="searchTemplate()" type="submit" class="btn btn-primary">Search</button>
+</div>
+<div class="container">
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr>
+          <th scope="col">Sample Questions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+              <li *ngFor="let result of questionObject">
+                {{ result.QuestionGiven }}
+                <ul>
+                  <li *ngFor="let option of result.Options">
+                    {{ option.OptionGiven }}
+                 </li>
+                </ul>
+              </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="generateQuesPost()" type="submit" class="btn btn-primary">Generate Questions</button>
 </div>
