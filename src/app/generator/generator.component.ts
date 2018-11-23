@@ -209,6 +209,8 @@ export class GeneratorComponent implements OnInit {
   optionObject = []
   topic : string = ""
   category : string = ""
+  categoryId : string = ""
+  categoryId_Qproperty : string = ""
   getOptionId$: any={}
   getOptionsList$: any={}
 
@@ -241,27 +243,37 @@ export class GeneratorComponent implements OnInit {
 
   // for generating Sample Questions for user review
   generateQuesReviewNew(currentSubjectId : string, currentSubject : string) {
+    console.log("generateQuesReviewNew-"+" currentSubjectId-"+currentSubjectId+" currentSubject-"+currentSubject)
     this.quesTemp = false
     this.category = currentSubject
-
+    this.categoryId = currentSubjectId
+    console.log(this.categoryId+"/////////////")
     this.queryQues = [] // for storing set of Questions along with Options
+    console.log("instanceOfValue-"+this.instanceOfValue)
     this.sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+this.instanceOfValue+".?cid wdt:"+currentSubjectId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
-    // console.log(this.instanceOfValue+" "+currentSubjectId)// Subscribing to get Questions based on clicked Topic
+    // Subscribing to get Questions based on clicked Topic
     this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
       data => {
         this.getSampleQuestion$ = data
-        this.quesTemp = true
-        // console.log(data)
+        // this.quesTemp = true
+        console.log("getSampleQuestion-"+data)
+        this.generateOptionId(currentSubject)
       }
     )
 
+  }
+
+  generateOptionId(currentSubject : string){
     // Subscribing to get Option Id based on clicked Topic
     this.wikidata.getSearchObject(currentSubject).subscribe(
       data => {
         this.getOptionId$ = data;
+        console.log("getOptionId - "+this.getOptionId$.search.length)
         for(let i=0; i < this.getOptionId$.search.length; i++){
-          if( this.getOptionId$.search[i].id.indexOf('Q') > -1 && this.getOptionId$.search[i].match.text == this.category ) {
+          if( this.getOptionId$.search[i].id.indexOf('Q') > -1) {
+            this.categoryId_Qproperty=this.getOptionId$.search[i].id
             this.sparQL = "SELECT ?cidLabel WHERE {?cid wdt:P31 wd:"+this.getOptionId$.search[i].id+" .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
+            // console.log("currentSubject ID - "+this.getOptionId$.search[i].id)
             // Subscribing to get related Options based on clicked Topic for each generated sample Question
             this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
               data => {
@@ -269,15 +281,14 @@ export class GeneratorComponent implements OnInit {
                 for(let i = 0; i < this.getOptionsList$.results.bindings.length; i++){
                   this.optionObject.push(this.getOptionsList$.results.bindings[i].cidLabel.value)
                 }
-              } 
+                this.quesTemp = true
+              }
             )
+
           }
-          
         }
-        // console.log(this.queryQues)
       } 
     )
-
   }
 
   searchTemplate(){
@@ -305,7 +316,7 @@ export class GeneratorComponent implements OnInit {
       // console.log(this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
       ques.Options = this.randomizeOptionsNew(this.optionObject,this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
       this.questionObject.push(ques)
-      console.log(ques)
+      // console.log(ques)
     }
   }
 
@@ -342,6 +353,34 @@ export class GeneratorComponent implements OnInit {
         arr[arr.length] = randomnumber;
     }
     return arr;
+  }
+
+  generateQuesPostNew() {
+    var templateObject = new QuizRTTemplate()
+    var subjectPart = this.template.substring(
+      this.template.lastIndexOf("[") + 1,
+      this.template.lastIndexOf("]")
+    )
+    var optionPart = this.template.substring(
+      this.template.lastIndexOf("(") + 1,
+      this.template.lastIndexOf(")")
+    )
+    this.template = this.template
+                        .replace(subjectPart,"P31:"+this.instanceOfValue).replace(optionPart,this.categoryId)
+
+    templateObject.Text = this.template
+    templateObject.Categ = this.categoryId
+    templateObject.Topic = this.instanceOfValue
+    templateObject.CategName = this.category
+    templateObject.TopicName = this.topic
+    // templateObject.Categ_Q_property=this.categoryId_Qproperty;
+
+    console.log(templateObject)
+    // this.wikidata.postEntityObject(templateObject).subscribe(
+    //   data => {
+    //     console.log(data)
+    //   }
+    // )
   }
 
 }

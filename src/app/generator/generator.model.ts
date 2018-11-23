@@ -5,6 +5,7 @@ export class QuizRTTemplate {
     CategName: string;
     Topic: string;
     TopicName: string;
+    // Categ_Q_property:string;
 }
 
 export class Questions {
