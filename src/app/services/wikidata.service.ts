@@ -5,7 +5,11 @@ import { QuizRTTemplate, Questions, Options } from '../generator/generator.model
 @Injectable({
   providedIn: 'root'
 })
-export class WikidataService {    
+export class WikidataService {
+
+  getAllTempalte() {
+    return this.httpcaller.get('http://localhost:5000/api/quizrt/template');
+  }    
 
   constructor( private httpcaller : HttpClient ) {
   }

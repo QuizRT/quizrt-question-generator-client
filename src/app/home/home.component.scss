@@ -1,0 +1,51 @@
+div.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+$primary: #CCA20E !default;
+  
+.btn-primary {
+    background-color: $primary;
+    border-color: $primary;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: darken($primary, 10%) ;
+        border-color: darken($primary, 10%) ;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem fade-out($primary, 0.5);
+    }
+}
+.btn-xl {
+    text-transform: uppercase;
+    padding: 2rem 5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    margin: 5%;
+}
+@media (max-width: 992px) {
+    .btn-xl {
+        padding: 1.5rem 4rem;
+        font-weight: 650;
+        margin: 3%;
+    }
+}
+@media (max-width: 576px) {
+    .btn-xl {
+        padding: 1.2rem 3rem;
+        font-weight: 600;
+    }
+}
+a{
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.9;
+    }
+}

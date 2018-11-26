@@ -1,11 +1,11 @@
 <div class="container">
     <div class="form-group">
-        <label for="inputAddress">Subject</label>
+        <label for="inputAddress"><h4>Subject</h4></label>
         <input type="text" class="form-control" id="inputAddress" placeholder="Rahul Dravid" [(ngModel)]='subject'>
     </div>
-    <button (click)="searchObject()" type="submit" class="btn btn-primary">Search</button>
+    <button (click)="searchObject()" type="submit" class="btn btn-warning">Search</button>
 </div>
-<div *ngIf = "true" class="container">
+<div *ngIf = "searchEntityCheck == true" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -20,8 +20,8 @@
           <td>{{ result.id }}</td>
           <td>{{ result.label }}</td>
           <td>{{ result.description }}</td>
-          <!-- <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-primary">Go</button></td> -->
-          <td><button (click)="searchEntityNew(result.id)" type="submit" class="btn btn-primary">Go</button></td>
+          <!-- <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-warning">Go</button></td> -->
+          <td><button (click)="searchEntityNew(result.id)" type="submit" class="btn btn-warning">Go</button></td>
         </tr>
       </tbody>
     </table>
@@ -40,7 +40,7 @@
           <td>
               <li *ngFor="let result of occupationName">
                 {{ result.value }}
-                <button (click)="generateQuesReview(result.key,result.value)" type="submit" class="btn btn-primary">Go</button>
+                <button (click)="generateQuesReview(result.key,result.value)" type="submit" class="btn btn-warning">Go</button>
               </li>
           </td>
         </tr>
@@ -69,9 +69,9 @@
         </tr>
       </tbody>
     </table>
-    <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-primary">Generate Questions</button>
+    <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-warning">Generate Questions</button>
 </div> -->
-<div class="container">
+<div *ngIf = "searchPropertyCheck == true" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -84,7 +84,7 @@
           <td>{{ result.Subject }}</td>
           <td>
               {{ result.Value }}
-              <button (click)="generateQuesReviewNew(result.SubjectId,result.Subject)" type="submit" class="btn btn-primary">Go</button>
+              <button (click)="generateQuesReviewNew(result.SubjectId,result.Subject)" type="submit" class="btn btn-warning">Go</button>
           </td>
         </tr>
       </tbody>
@@ -92,12 +92,12 @@
 </div>
 <div *ngIf = "quesTemp == true" class="container">
   <div class="form-group">
-      <label for="inputAddress">Template (Type as: "Who is the (option) of [subject]?")</label>
+      <label for="inputAddress"><h5>Template (Type as: "Who is the (option) of [subject]?")</h5></label>
       <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
   </div>
-  <button (click)="searchTemplate()" type="submit" class="btn btn-primary">Search</button>
+  <button (click)="searchTemplate()" type="submit" class="btn btn-warning">Search</button>
 </div>
-<div class="container">
+<div *ngIf = "generateQuesCheck == true" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -119,5 +119,5 @@
         </tr>
       </tbody>
     </table>
-    <button (click)="generateQuesPostNew()" type="submit" class="btn btn-primary">Generate Questions</button>
+    <button (click)="generateQuesPostNew()" type="submit" class="btn btn-warning">Generate Questions</button>
 </div>

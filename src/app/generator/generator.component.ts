@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { WikidataService } from '../services/wikidata.service';
 import { QuizRTTemplate, Questions, Options, General } from './generator.model';
+import { fakeAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-generator',
@@ -32,15 +33,20 @@ export class GeneratorComponent implements OnInit {
   optionNumber: number = 3
   optionArr = []
 
-  constructor( private wikidata : WikidataService) { }
+  constructor( private wikidata : WikidataService ) { }
 
   ngOnInit() {
   }
 
   searchObject() {
+    this.quesTemp = false // To Hide Template Form from UI
+    this.searchPropertyCheck = false
+    this.generateQuesCheck = false
+
     this.wikidata.getSearchObject(this.subject).subscribe(
       data => {
         this.searchObject$ = data
+        this.searchEntityCheck = true
       }
     );
   }
@@ -187,9 +193,9 @@ export class GeneratorComponent implements OnInit {
     //   topicName : this.currentTopicName
     // };
     var templateObject = new QuizRTTemplate();
-    templateObject.Categ = this.currentCateg;
-    templateObject.Topic = this.currentTopic;
-    templateObject.CategName = this.currentCategName;
+    templateObject.CategoryId = this.currentCateg;
+    templateObject.TopicId = this.currentTopic;
+    templateObject.CategoryName = this.currentCategName;
     templateObject.TopicName = this.currentTopicName;
     this.wikidata.postEntityObject(templateObject).subscribe(
       data => {
@@ -200,9 +206,14 @@ export class GeneratorComponent implements OnInit {
 
   // -----------------------------------------
 
+  quesTemp : boolean = false
+  searchEntityCheck : boolean = false  
+  searchPropertyCheck : boolean = false
+  generateQuesCheck : boolean = false
+
   arrOfGeneral = []
   instanceOfValue : string = ""
-  quesTemp : boolean = false
+  
   template : string = ""
   getSampleQuestion$: any={}
   questionObject = []
@@ -215,6 +226,8 @@ export class GeneratorComponent implements OnInit {
   getOptionsList$: any={}
 
   searchEntityNew(entityId : string) {
+    this.generateQuesCheck = false
+    this.quesTemp = false
     
     this.arrOfGeneral = []
 
@@ -234,7 +247,7 @@ export class GeneratorComponent implements OnInit {
           genObject.Value = this.searchEntity$.results.bindings[i].valLabel.value
           this.arrOfGeneral.push(genObject)
         }
-
+        this.searchPropertyCheck = true
       }
     );
     // subscribe ends here
@@ -243,11 +256,14 @@ export class GeneratorComponent implements OnInit {
 
   // for generating Sample Questions for user review
   generateQuesReviewNew(currentSubjectId : string, currentSubject : string) {
-    console.log("generateQuesReviewNew-"+" currentSubjectId-"+currentSubjectId+" currentSubject-"+currentSubject)
+    console.log("Inside - generateQuesReviewNew: "+" currentSubjectId-"+currentSubjectId+" currentSubject-"+currentSubject)
+    
     this.quesTemp = false
+    this.generateQuesCheck = false
+    
     this.category = currentSubject
     this.categoryId = currentSubjectId
-    console.log(this.categoryId+"/////////////")
+    // console.log(this.categoryId)
     this.queryQues = [] // for storing set of Questions along with Options
     console.log("instanceOfValue-"+this.instanceOfValue)
     this.sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+this.instanceOfValue+".?cid wdt:"+currentSubjectId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}Limit 10";
@@ -256,7 +272,7 @@ export class GeneratorComponent implements OnInit {
       data => {
         this.getSampleQuestion$ = data
         // this.quesTemp = true
-        console.log("getSampleQuestion-"+data)
+        // console.log("getSampleQuestion-"+data)
         this.generateOptionId(currentSubject)
       }
     )
@@ -318,6 +334,7 @@ export class GeneratorComponent implements OnInit {
       this.questionObject.push(ques)
       // console.log(ques)
     }
+    this.generateQuesCheck = true
   }
 
   randomizeOptionsNew(getQuestionOptions$ : any[], entityValue : string) {
@@ -369,14 +386,18 @@ export class GeneratorComponent implements OnInit {
                         .replace(subjectPart,"P31:"+this.instanceOfValue).replace(optionPart,this.categoryId)
 
     templateObject.Text = this.template
-    templateObject.Categ = this.categoryId
-    templateObject.Topic = this.instanceOfValue
-    templateObject.CategName = this.category
+    templateObject.CategoryId = this.categoryId
+    templateObject.TopicId = this.instanceOfValue
+    templateObject.CategoryName = this.category
     templateObject.TopicName = this.topic
-    // templateObject.Categ_Q_property=this.categoryId_Qproperty;
 
     console.log(templateObject)
-    // this.wikidata.postEntityObject(templateObject).subscribe(
+    this.wikidata.postEntityObject(templateObject).subscribe(
+      data => {
+        console.log(data)
+      }
+    )
+    // this.wikidata.postEntityObject(templateObject).toPromise().then(
     //   data => {
     //     console.log(data)
     //   }

@@ -6,11 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GeneratorComponent } from './generator/generator.component';
+import { HomeComponent } from './home/home.component';
+import { CheckerComponent } from './checker/checker.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GeneratorComponent
+    GeneratorComponent,
+    HomeComponent,
+    CheckerComponent
   ],
   imports: [
     BrowserModule,

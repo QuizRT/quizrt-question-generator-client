@@ -1,11 +1,9 @@
 export class QuizRTTemplate {
     Text: string;
-    SparQL: string;
-    Categ: string;
-    CategName: string;
-    Topic: string;
+    CategoryId: string;
+    CategoryName: string;
+    TopicId: string;
     TopicName: string;
-    // Categ_Q_property:string;
 }
 
 export class Questions {
