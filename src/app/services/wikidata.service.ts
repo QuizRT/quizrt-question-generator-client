@@ -8,7 +8,8 @@ import { QuizRTTemplate, Questions, Options } from '../generator/generator.model
 export class WikidataService {
 
   getAllTempalte() {
-    return this.httpcaller.get('http://localhost:5000/api/quizrt/template');
+    // return this.httpcaller.get('http://localhost:5000/api/quizrt/template');
+    return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/template');
   }    
 
   constructor( private httpcaller : HttpClient ) {
@@ -23,8 +24,8 @@ export class WikidataService {
   }
 
   postEntityObject(entityObject : QuizRTTemplate) {
-    return this.httpcaller.post('http://localhost:5000/api/quizrt',entityObject)
-    // return this.httpcaller.post('http://172.23.238.164:8080/api/quizrt',entityObject)
+    // return this.httpcaller.post('http://localhost:5000/api/quizrt',entityObject)
+    return this.httpcaller.post('http://172.23.238.164:8080/api/quizrt',entityObject)
   }
 
   generateEntityQuesOption(sparQL : string) {
