@@ -397,11 +397,6 @@ export class GeneratorComponent implements OnInit {
       //   console.log(data)
       // }
     )
-    // this.wikidata.postEntityObject(templateObject).toPromise().then(
-    //   data => {
-    //     console.log(data)
-    //   }
-    // )
   }
 
 }
