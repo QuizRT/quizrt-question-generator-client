@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit } from '@angular/core';
 import { WikidataService } from '../services/wikidata.service';
 import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 import { fakeAsync } from '@angular/core/testing';
+import { strictEqual } from 'assert';
 
 @Component({
   selector: 'app-generator',
@@ -295,7 +296,11 @@ export class GeneratorComponent implements OnInit {
               data => {
                 this.getOptionsList$ = data
                 for(let i = 0; i < this.getOptionsList$.results.bindings.length; i++){
-                  this.optionObject.push(this.getOptionsList$.results.bindings[i].cidLabel.value)
+                  var eachOption = new String(this.getOptionsList$.results.bindings[i].cidLabel.value)
+                  if(this.getOptionsList$.results.bindings.length > 0 && eachOption != "" && !(eachOption[0] == 'Q' && /^\d+$/.test(eachOption.substring(1)))) {
+                    // console.log("------"+eachOption)
+                    this.optionObject.push(this.getOptionsList$.results.bindings[i].cidLabel.value)
+                  }
                 }
                 this.quesTemp = true
               }
@@ -321,18 +326,20 @@ export class GeneratorComponent implements OnInit {
       this.template.lastIndexOf("(") + 1,
       this.template.lastIndexOf(")")
     )
-    for(let i=0; i < this.getSampleQuestion$.results.bindings.length; i++){
-
-      var ques = new Questions()
-      ques.QuestionGiven = this.template
-                            .replace(subjectPart,this.getSampleQuestion$.results.bindings[i].cidLabel.value)
-                            .replace(optionPart,optionReplacement)
-      ques.Topic = this.topic
-      ques.Categ = this.category
-      // console.log(this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
-      ques.Options = this.randomizeOptionsNew(this.optionObject,this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
-      this.questionObject.push(ques)
-      // console.log(ques)
+    for(let i=0; i < this.getSampleQuestion$.results.bindings.length; i++) {
+      if(!(this.getSampleQuestion$.results.bindings[i].cidLabel.value[0] == 'Q' && 
+              /^\d+$/.test(this.getSampleQuestion$.results.bindings[i].cidLabel.value.substring(1)) )) {
+        var ques = new Questions()
+        ques.QuestionGiven = this.template
+                              .replace(subjectPart,this.getSampleQuestion$.results.bindings[i].cidLabel.value)
+                              .replace(optionPart,optionReplacement)
+        ques.Topic = this.topic
+        ques.Categ = this.category
+        // console.log(this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
+        ques.Options = this.randomizeOptionsNew(this.optionObject,this.getSampleQuestion$.results.bindings[i].authortitleLabel.value)
+        this.questionObject.push(ques)
+        // console.log(ques)
+      }
     }
     this.generateQuesCheck = true
   }
@@ -344,7 +351,7 @@ export class GeneratorComponent implements OnInit {
     // for(let i=0; i < randomNummber.length; i++) console.log(randomNummber[i])
     for(let i=0; i < randomNummber.length; i++) {
       // making check to not get options that is equal to Correct Option
-      if(getQuestionOptions$[randomNummber[i]] != entityValue){
+      if(getQuestionOptions$[randomNummber[i]] != entityValue) {
         var ops = new Options();
         ops.OptionGiven = getQuestionOptions$[randomNummber[i]]
         this.optionArr.push(ops)
@@ -393,9 +400,9 @@ export class GeneratorComponent implements OnInit {
 
     console.log(templateObject)
     this.wikidata.postEntityObject(templateObject).subscribe(
-      // data => {
-      //   console.log(data)
-      // }
+      data => {
+        console.log("data-post-successful")
+      }
     )
   }
 

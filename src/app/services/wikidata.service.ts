@@ -6,10 +6,9 @@ import { QuizRTTemplate, Questions, Options } from '../generator/generator.model
   providedIn: 'root'
 })
 export class WikidataService {
-url:string='http://172.23.238.164:7000/questiongenerator/';
+  url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
     // return this.httpcaller.get('http://localhost:7001/api/quizrt/templates');
-    // return this.httpcaller.get(this.url+"templates");
     return this.httpcaller.get('http://172.23.238.164:7000/questiongenerator/templates');
     // return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/templates');
   }    
