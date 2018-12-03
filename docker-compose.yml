@@ -1,3 +1,4 @@
+version: "3.5"
 services:
   question-generator-client:
     build:
@@ -10,4 +11,3 @@ services:
     volumes:
       - ".:/QuizRT/usr/src/app"
       - /QuizRT/usr/src/app/node_modules
-version: "3"
