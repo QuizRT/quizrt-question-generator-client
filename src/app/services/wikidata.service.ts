@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { QuizRTTemplate, Questions, Options } from '../generator/generator.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WikidataService {
+  APIEndPoint = environment.APIEndPoint;
   url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
     // return this.httpcaller.get('http://localhost:7001/api/quizrt/templates');

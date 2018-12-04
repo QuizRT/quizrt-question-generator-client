@@ -3,6 +3,7 @@ import { WikidataService } from '../services/wikidata.service';
 import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 import { fakeAsync } from '@angular/core/testing';
 import { strictEqual } from 'assert';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-generator',
@@ -10,6 +11,7 @@ import { strictEqual } from 'assert';
   styleUrls: ['./generator.component.scss']
 })
 export class GeneratorComponent implements OnInit {
+  APIEndPoint = environment.APIEndPoint;
 
   searchObject$: any={}
   searchEntity$: any={}
@@ -39,7 +41,7 @@ export class GeneratorComponent implements OnInit {
   ngOnInit() {
   }
 
-  searchObject() {
+  searchObject() {console.log("-----"+this.APIEndPoint);
     this.quesTemp = false // To Hide Template Form from UI
     this.searchPropertyCheck = false
     this.generateQuesCheck = false
