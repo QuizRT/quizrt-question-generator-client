@@ -16,3 +16,4 @@ services:
 networks:
   question-generator-client-network:
     name: quizrt-network
+    external: true
