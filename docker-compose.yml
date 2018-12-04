@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile
     labels:
       SERVICE_4200_NAME: QuizMaster
-    ports:
-      - "4200:4200"
+    # ports:
+    #   - "4200:4200"
     volumes:
       - ".:/QuizRT/usr/src/app"
       - /QuizRT/usr/src/app/node_modules
