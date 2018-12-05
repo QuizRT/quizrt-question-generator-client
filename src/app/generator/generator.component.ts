@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./generator.component.scss']
 })
 export class GeneratorComponent implements OnInit {
-  APIEndPoint = environment.APIEndPoint;
+  private APIEndPoint: string;
 
   searchObject$: any={}
   searchEntity$: any={}
@@ -36,12 +36,15 @@ export class GeneratorComponent implements OnInit {
   optionNumber: number = 3
   optionArr = []
 
-  constructor( private wikidata : WikidataService ) { }
+  constructor( private wikidata : WikidataService ) {
+    this.APIEndPoint = environment.APIEndPoint;
+    console.log(this.APIEndPoint);
+  }
 
   ngOnInit() {
   }
 
-  searchObject() {console.log("-----"+this.APIEndPoint);
+  searchObject() {
     this.quesTemp = false // To Hide Template Form from UI
     this.searchPropertyCheck = false
     this.generateQuesCheck = false
