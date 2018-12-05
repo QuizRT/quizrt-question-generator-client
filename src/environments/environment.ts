@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  APIEndPoint: "http://localhost:7001/api/quizrt/"
+  APIEndPoint: "http://localhost:7001/api/quizrt"
 };
 
 /*
