@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { QuizRTTemplate, Questions, Options } from '../generator/generator.model';
 import { environment } from '../../environments/environment';
-
+//import {Observable} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,11 +10,11 @@ export class WikidataService {
   APIEndPoint = environment.APIEndPoint;
   url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
-    return this.httpcaller.get(this.APIEndPoint+'/templates');
-    // return this.httpcaller.get('http://localhost:7001/api/quizrt/templates');
+    //return this.httpcaller.get(this.APIEndPoint+'/templates');
+     return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
     // return this.httpcaller.get('http://172.23.238.164:7000/questiongenerator/templates');
     // return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/templates');
-  }    
+  }   
 
   constructor( private httpcaller : HttpClient ) {
   }
@@ -28,8 +28,9 @@ export class WikidataService {
   }
 
   postEntityObject(entityObject : QuizRTTemplate) {
-    return this.httpcaller.post(this.APIEndPoint,entityObject)
-    // return this.httpcaller.post('http://localhost:7001/api/quizrt',entityObject)
+    console.log("opopo")
+    //return this.httpcaller.post(this.APIEndPoint,entityObject)
+     return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:7000/questiongenerator',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:8080/api/quizrt',entityObject)
   }
@@ -37,6 +38,15 @@ export class WikidataService {
   generateEntityQuesOption(sparQL : string) {
     return this.httpcaller.get('https://query.wikidata.org/sparql?query='+sparQL+'&format=json')
   }
+
+  // generateEntityQuesOptionss(sparQL : string) {
+  //   if(sparQL!="unknown")
+  //   {
+  //       return this.httpcaller.get('https://query.wikidata.org/sparql?query='+sparQL+'&format=json');
+  //   }
+  //       return Observable.throw(`1`);
+  //     //return this.http.get<SearchResults<T>>(`${this.API_URL}/search/${what}`, { params });
+  // }
   
   // ----------------
 
