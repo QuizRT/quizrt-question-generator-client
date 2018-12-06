@@ -92,7 +92,12 @@
 </div>
 <div *ngIf = "quesTemp == true" class="container">
   <div class="form-group">
-      <label for="inputAddress"><h5>Template (Type as: "Who is the (option) of [subject]?")</h5></label>
+      <label for="inputAddress" data-toggle="tooltip" data-placement="top" title="Follow Me Here Dude!! :B">
+        <h5>Template (Type as: "Who is the (option) of [subject]?")
+          <!-- <i class="fas fa-info-circle"></i> -->
+          <fa name="cog" animation="spin"></fa>
+        </h5>
+      </label>
       <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
   </div>
   <button (click)="searchTemplate()" type="submit" class="btn btn-warning">Search</button>
@@ -121,3 +126,11 @@
     </table>
     <button (click)="generateQuesPostNew()" type="submit" class="btn btn-warning">Generate Questions</button>
 </div>
+
+
+
+<script>
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
