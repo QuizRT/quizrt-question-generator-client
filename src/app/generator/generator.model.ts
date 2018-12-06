@@ -4,6 +4,7 @@ export class QuizRTTemplate {
     CategoryName: string;
     TopicId: string;
     TopicName: string;
+    QuestionList:string;
 }
 
 export class Questions {

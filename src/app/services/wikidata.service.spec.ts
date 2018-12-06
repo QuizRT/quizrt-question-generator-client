@@ -12,7 +12,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { GeneratorComponent } from '../generator/generator.component';
 import { HomeComponent } from '../home/home.component';
 import { CheckerComponent } from '../checker/checker.component';
-
+import {} from 'jasmine';
 //import { GeneratorComponent } from '../generator/generator.component';
 import { createStylingContextTemplate } from '@angular/core/src/render3/styling';
 
@@ -20,8 +20,8 @@ describe('WikidataService', () => {
   let service:WikidataService;
   let httpMock:HttpTestingController;
   let Sparql:string="";
-  let Sparql_Object:QuizRTTemplate={Text: "Who is the (P84) of [P31:Q162875]?", CategoryId: "P84", TopicId: "Q162875", CategoryName: "architect", TopicName: "mausoleum"};
-  let Sparql_Object_mock:any;
+  let Sparql_Object:QuizRTTemplate={Text: "Who is the (P84) of [P31:Q162875]?", CategoryId: "P84", TopicId: "Q162875", CategoryName: "architect", TopicName: "mausoleum",QuestionList:""};
+  let Sparql_Object_mock:any={name:"harsha"};
  // let Testarray=["Rahul Dravid","Rahul Dravid:Timeless Steel","List of awarda and acheivements"];
   beforeEach(() => {TestBed.configureTestingModule({
     providers: [WikidataService,{provide: APP_BASE_HREF, useValue: '/'}],
@@ -52,10 +52,19 @@ describe('WikidataService', () => {
       console.log(Sparql_Object_mock.name.count+"----------------")
       expect(Sparql_Object_mock.name.length).toBe(1)
     })
-    const request = httpMock.expectOne(`${service.url}templates`,'call to api')
+    const request = httpMock.expectOne(`${service.APIEndPoint}/templates`,'call to api')
     expect(request.request.method).toBe("GET");
     request.flush({name:["Who is the (P276) of [P31:Q162875] ?"]});
   });
+
+  // it('should throw an error if trying to search for not supported `what`', () => {
+  //   service.generateEntityQuesOptionss("unknown")
+  //     .subscribe(() => {}, err => {
+  //       expect(err).toBe(`1`);
+  //     });
+
+  //   httpMock.expectNone(`https://query.wikidata.org/sparql?query=unknown&format=json`);
+  // });
 
 
   it('should retrive the data from the API via PostTemplate', () => {
@@ -63,8 +72,8 @@ describe('WikidataService', () => {
     service.postEntityObject(Sparql_Object).subscribe(input=>{
       expect(input).toBeDefined;
     })
-    const request = httpMock.expectOne(`http://172.23.238.164:7000/questiongenerator`,'post to api');
-    //expect(request.request.method).toBe("POST");
+    const request = httpMock.expectOne(`${service.APIEndPoint}`,'post to api');
+    expect(request.request.method).toBe("POST");
     request.flush(Sparql_Object_mock);
   });
 
