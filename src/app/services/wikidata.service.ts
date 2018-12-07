@@ -28,7 +28,6 @@ export class WikidataService {
   }
 
   postEntityObject(entityObject : QuizRTTemplate) {
-    console.log("opopo")
     return this.httpcaller.post(this.APIEndPoint,entityObject)
     // return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:7000/questiongenerator',entityObject)
