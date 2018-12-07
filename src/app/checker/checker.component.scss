@@ -2,3 +2,48 @@ div.container {
     padding: 4%;
     margin: 0%;
 }
+
+#question {
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color:whitesmoke;
+}
+
+.list-group-item {
+    background-color: #05668D;
+    border-color: #05668D;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: darken(#05668D, 10%) ;
+        border-color: darken(#05668D, 10%) ;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem fade-out(#05668D, 0.5);
+    }
+}
+
+#correctOption{
+    font-size: 20px;
+    color:whitesmoke;
+}
+
+#otherOptions{
+   line-height: 0.9em;
+   font-size: 20px;
+   color:whitesmoke;
+   
+
+  // margin-top: -20px;
+
+}
+
+#otherOption{
+//    margin-top: -10px;
+ 
+ }
+
+.list-group{
+    padding: 2%;
+}

@@ -3,13 +3,21 @@
   <h4>List Of Templates: </h4>
   <div *ngFor = "let result of listTemplate" class="list-group">
     <button (click)="refresh_template(result.template)" class="list-group-item list-group-item-action">
-      {{ result.single_Question.question }}
-      <div>
-          {{ result.single_Question.correctOption }}
+      <div id="question">
+          {{ result.single_Question.question }}
       </div>
-      <div *ngFor = "let op of result.single_Question.otherOptionsList">
-        {{op.option}}
-      </div>
+          <ul  id="correctOption">
+              <li >
+                  {{ result.single_Question.correctOption }}
+              </li>
+          </ul>
+      <!-- <div id="otherOptions" *ngFor = "let op of result.single_Question.otherOptionsList"> -->
+        <ul *ngFor = "let op of result.single_Question.otherOptionsList">
+          <li id="otherOptions">
+            {{op.option}}
+          </li>
+      </ul>
+      <!-- </div> -->
     </button>
   </div>
 </div>
