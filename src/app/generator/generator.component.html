@@ -1,13 +1,14 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
-<app-back></app-back>
+
 
 <div class="container">
-    <div class="form-group">
-        <label for="inputAddress"><h4>Subject</h4></label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="Burj Khalifa" [(ngModel)]='subject'>
-    </div>
-    <button (click)="searchObject()" type="submit" class="btn btn-warning">Search</button>
+  <app-back></app-back>
+  <div class="form-group">
+      <label for="inputAddress"><h4>Subject</h4></label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="Burj Khalifa" [(ngModel)]='subject'>
+  </div>
+  <button (click)="searchObject()" type="submit" class="btn btn-warning">Search</button>
 </div>
 <div *ngIf = "searchEntityCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
 <div *ngIf = "searchEntityCheck == 2" class="container">
