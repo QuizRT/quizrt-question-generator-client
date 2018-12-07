@@ -4,6 +4,7 @@ import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 import { fakeAsync } from '@angular/core/testing';
 import { strictEqual } from 'assert';
 import { environment } from '../../environments/environment';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class GeneratorComponent implements OnInit {
   optionNumber: number = 3
   optionArr = []
 
-  constructor( private wikidata : WikidataService ) {
+  constructor( private wikidata : WikidataService, public snackBar: MatSnackBar ) {
     this.APIEndPoint = environment.APIEndPoint;
     console.log(this.APIEndPoint);
   }
@@ -395,6 +396,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   generateQuesPostNew() {
+    this.openSnackBarForQuestionQuerationBegin()
     this.questionPostSuccess = true
     var templateObject = new QuizRTTemplate()
     var subjectPart = this.template.substring(
@@ -418,9 +420,22 @@ export class GeneratorComponent implements OnInit {
     this.wikidata.postEntityObject(templateObject).subscribe(
       data => {
         console.log("Success")
-        this.questionPostSuccess = false
+        // this.questionPostSuccess = false
+        this.openSnackBarForQuestionQuerationCompleted()
       }
     )
+  }
+
+  openSnackBarForQuestionQuerationBegin() {
+    this.snackBar.open("Question Quration Started! Have A Break!!", "Ok", {
+      duration: 10000,
+    });
+  }
+
+  openSnackBarForQuestionQuerationCompleted() {
+    this.snackBar.open("Question Generation Success!!", "Ok", {
+      duration: 5000,
+    });
   }
 
 }
