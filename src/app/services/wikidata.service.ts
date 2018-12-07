@@ -10,8 +10,8 @@ export class WikidataService {
   APIEndPoint = environment.APIEndPoint;
   url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
-    return this.httpcaller.get(this.APIEndPoint+'/templates');
-    // return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
+    //return this.httpcaller.get(this.APIEndPoint+'/templates');
+    return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
     // return this.httpcaller.get('http://172.23.238.164:7000/questiongenerator/templates');
     // return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/templates');
   }   
@@ -23,13 +23,17 @@ export class WikidataService {
     return this.httpcaller.get('https://www.wikidata.org/w/api.php?origin=*&action=wbsearchentities&search='+subject+'&language=en&format=json')
   }
 
+  // getSample_Questions(subject : string) {
+  //   return this.httpcaller.get(this.APIEndPoint+"/questions"+subject+"1");
+  // }
+
   getSearchEntity(entityId : string) {
     return this.httpcaller.get('https://www.wikidata.org/w/api.php?origin=*&action=wbgetentities&ids='+entityId+'&languages=en&format=json')
   }
 
   postEntityObject(entityObject : QuizRTTemplate) {
     return this.httpcaller.post(this.APIEndPoint,entityObject)
-    // return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
+    //return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:7000/questiongenerator',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:8080/api/quizrt',entityObject)
   }

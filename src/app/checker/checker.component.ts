@@ -9,7 +9,7 @@ import { QuizRTTemplate, Questions, Options } from '../generator/generator.model
 export class CheckerComponent implements OnInit {
 
   constructor( private wikidata : WikidataService) { }
-
+sample_questions =[];
   ngOnInit() {
     this.getAllTemplate();
   }
@@ -18,9 +18,11 @@ export class CheckerComponent implements OnInit {
 
   getAllTemplate(){
     this.wikidata.getAllTempalte().subscribe(
-      data => {
-        console.log(data)
-        this.listTemplate = data
+      data => { 
+        console.log(data+"------------------------------")
+        this.listTemplate = data;
+        //console.log(typeof(this.listTemplate));
+        console.log(this.listTemplate[0].single_Question);
       }
     )
   }
