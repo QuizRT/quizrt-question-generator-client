@@ -11,7 +11,7 @@ import { CheckerComponent } from './checker/checker.component';
 import { BackComponent } from './back/back.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTooltipModule , MatProgressSpinnerModule } from '@angular/material';
+import { MatTooltipModule , MatProgressSpinnerModule, MatFormFieldModule } from '@angular/material';
 import { from } from 'rxjs';
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
@@ -30,7 +30,8 @@ import { from } from 'rxjs';
     FormsModule,
     BrowserAnimationsModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]
