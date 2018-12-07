@@ -1,3 +1,7 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+<app-back></app-back>
+
 <div class="container">
     <div class="form-group">
         <label for="inputAddress"><h4>Subject</h4></label>
@@ -5,7 +9,8 @@
     </div>
     <button (click)="searchObject()" type="submit" class="btn btn-warning">Search</button>
 </div>
-<div *ngIf = "searchEntityCheck == true" class="container">
+<div *ngIf = "searchEntityCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+<div *ngIf = "searchEntityCheck == 2" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -71,7 +76,8 @@
     </table>
     <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-warning">Generate Questions</button>
 </div> -->
-<div *ngIf = "searchPropertyCheck == true" class="container">
+<div *ngIf = "searchPropertyCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+<div *ngIf = "searchPropertyCheck == 2" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -90,14 +96,22 @@
       </tbody>
     </table>
 </div>
-<div *ngIf = "quesTemp == true" class="container">
+<div *ngIf = "quesTemp == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+<div *ngIf = "quesTemp == 2" class="container">
   <div class="form-group">
-      <label for="inputAddress"><h5>Template (Type as: "Who is the (option) of [subject]?")</h5></label>
+      <label for="inputAddress">
+        <h5>Template (Type as: "Who is the (option) of [subject]?")
+          <i class="fas fa-info-circle example-button" 
+            matTooltip="Replace 'option' in (option) with the Property selected in last step and keep [subject] as it is. Example: 1. What is the (country) of [subject]? 2. When was the [subject] (born)?"
+           matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
+        </h5>
+      </label>
       <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
   </div>
   <button (click)="searchTemplate()" type="submit" class="btn btn-warning">Search</button>
 </div>
-<div *ngIf = "generateQuesCheck == true" class="container">
+<div *ngIf = "generateQuesCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+<div *ngIf = "generateQuesCheck == 2" class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
         <tr>
@@ -121,3 +135,16 @@
     </table>
     <button (click)="generateQuesPostNew()" type="submit" class="btn btn-warning">Generate Questions</button>
 </div>
+<div *ngIf = "questionPostSuccess == true" class="loading-indicator"><mat-spinner></mat-spinner></div>
+
+<!-- For Bootstrap Tooltip -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script>
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>

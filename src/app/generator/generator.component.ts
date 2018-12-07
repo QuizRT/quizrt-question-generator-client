@@ -1,14 +1,18 @@
-import { Component, Input, Output, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, ViewEncapsulation } from '@angular/core';
 import { WikidataService } from '../services/wikidata.service';
 import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 import { fakeAsync } from '@angular/core/testing';
 import { strictEqual } from 'assert';
 import { environment } from '../../environments/environment';
 
+
 @Component({
   selector: 'app-generator',
   templateUrl: './generator.component.html',
-  styleUrls: ['./generator.component.scss']
+  styleUrls: ['./generator.component.scss'],
+  // Need to remove view encapsulation so that the custom tooltip style defined in
+  // `tooltip-custom-class-example.css` will not be scoped to this component's view.
+  encapsulation: ViewEncapsulation.None,
 })
 export class GeneratorComponent implements OnInit {
   private APIEndPoint: string;
@@ -45,14 +49,15 @@ export class GeneratorComponent implements OnInit {
   }
 
   searchObject() {
-    this.quesTemp = false // To Hide Template Form from UI
-    this.searchPropertyCheck = false
-    this.generateQuesCheck = false
+    this.searchEntityCheck = 1
+    this.quesTemp = 0 // To Hide Template Form from UI
+    this.searchPropertyCheck = 0
+    this.generateQuesCheck = 0
 
     this.wikidata.getSearchObject(this.subject).subscribe(
       data => {
         this.searchObject$ = data
-        this.searchEntityCheck = true
+        this.searchEntityCheck = 2
       }
     );
   }
@@ -212,10 +217,10 @@ export class GeneratorComponent implements OnInit {
 
   // -----------------------------------------
 
-  quesTemp : boolean = false
-  searchEntityCheck : boolean = false  
-  searchPropertyCheck : boolean = false
-  generateQuesCheck : boolean = false
+  quesTemp : number = 0
+  searchEntityCheck : number = 0  
+  searchPropertyCheck : number = 0
+  generateQuesCheck : number = 0
 
   arrOfGeneral = []
   instanceOfValue : string = ""
@@ -231,9 +236,12 @@ export class GeneratorComponent implements OnInit {
   getOptionId$: any={}
   getOptionsList$: any={}
 
+  questionPostSuccess: boolean = false
+
   searchEntityNew(entityId : string) {
-    this.generateQuesCheck = false
-    this.quesTemp = false
+    this.searchPropertyCheck = 1
+    this.generateQuesCheck = 0
+    this.quesTemp = 0
     
     this.arrOfGeneral = []
 
@@ -253,7 +261,7 @@ export class GeneratorComponent implements OnInit {
           genObject.Value = this.searchEntity$.results.bindings[i].valLabel.value
           this.arrOfGeneral.push(genObject)
         }
-        this.searchPropertyCheck = true
+        this.searchPropertyCheck = 2
       }
     );
     // subscribe ends here
@@ -264,8 +272,8 @@ export class GeneratorComponent implements OnInit {
   generateQuesReviewNew(currentSubjectId : string, currentSubject : string) {
     console.log("Inside - generateQuesReviewNew: "+" currentSubjectId-"+currentSubjectId+" currentSubject-"+currentSubject)
     
-    this.quesTemp = false
-    this.generateQuesCheck = false
+    this.quesTemp = 0
+    this.generateQuesCheck = 0
     
     this.category = currentSubject
     this.categoryId = currentSubjectId
@@ -286,6 +294,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   generateOptionId(currentSubject : string){
+    this.quesTemp = 1
     // Subscribing to get Option Id based on clicked Topic
     this.wikidata.getSearchObject(currentSubject).subscribe(
       data => {
@@ -307,7 +316,7 @@ export class GeneratorComponent implements OnInit {
                     this.optionObject.push(this.getOptionsList$.results.bindings[i].cidLabel.value)
                   }
                 }
-                this.quesTemp = true
+                this.quesTemp = 2
               }
             )
 
@@ -318,6 +327,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   searchTemplate(){
+    this.generateQuesCheck = 1
     this.questionObject = []
     var subjectPart = this.template.substring(
       this.template.lastIndexOf("["),
@@ -346,7 +356,7 @@ export class GeneratorComponent implements OnInit {
         // console.log(ques)
       }
     }
-    this.generateQuesCheck = true
+    this.generateQuesCheck = 2
   }
 
   randomizeOptionsNew(getQuestionOptions$ : any[], entityValue : string) {
@@ -385,6 +395,7 @@ export class GeneratorComponent implements OnInit {
   }
 
   generateQuesPostNew() {
+    this.questionPostSuccess = true
     var templateObject = new QuizRTTemplate()
     var subjectPart = this.template.substring(
       this.template.lastIndexOf("[") + 1,
@@ -406,7 +417,8 @@ export class GeneratorComponent implements OnInit {
     console.log(templateObject)
     this.wikidata.postEntityObject(templateObject).subscribe(
       data => {
-        console.log("data-post-successful")
+        console.log("Success")
+        this.questionPostSuccess = false
       }
     )
   }
