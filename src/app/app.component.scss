@@ -1,29 +1,9 @@
-#home_division {
-        text-align: center;
-        // background-color:#05668D; 
-}
-
-.btn-xl {
-    // border-radius: 50%;
-    // background-color: #05668D;
-    // text-transform: uppercase;
-    // padding: 2rem 5rem;
-    // font-size: 0.9rem;
-    // font-weight: 700;
-    // letter-spacing: 0.1rem;
-    // margin-left: 5%;
-    
-    border: none;
-    color: white;
-    padding: 20px;
+#BackButton {
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+    margin: 12px;
 
 }
+
 @media (max-width: 992px) {
     .btn-xl {
         padding: 1.5rem 4rem;

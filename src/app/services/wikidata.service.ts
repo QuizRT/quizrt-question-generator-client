@@ -10,8 +10,8 @@ export class WikidataService {
   APIEndPoint = environment.APIEndPoint;
   url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
-    //return this.httpcaller.get(this.APIEndPoint+'/templates');
-     return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
+    return this.httpcaller.get(this.APIEndPoint+'/templates');
+    // return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
     // return this.httpcaller.get('http://172.23.238.164:7000/questiongenerator/templates');
     // return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/templates');
   }   
@@ -29,8 +29,8 @@ export class WikidataService {
 
   postEntityObject(entityObject : QuizRTTemplate) {
     console.log("opopo")
-    //return this.httpcaller.post(this.APIEndPoint,entityObject)
-     return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
+    return this.httpcaller.post(this.APIEndPoint,entityObject)
+    // return this.httpcaller.post('http://172.23.238.164:7001/api/quizrt',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:7000/questiongenerator',entityObject)
     // return this.httpcaller.post('http://172.23.238.164:8080/api/quizrt',entityObject)
   }
@@ -38,17 +38,6 @@ export class WikidataService {
   generateEntityQuesOption(sparQL : string) {
     return this.httpcaller.get('https://query.wikidata.org/sparql?query='+sparQL+'&format=json')
   }
-
-  // generateEntityQuesOptionss(sparQL : string) {
-  //   if(sparQL!="unknown")
-  //   {
-  //       return this.httpcaller.get('https://query.wikidata.org/sparql?query='+sparQL+'&format=json');
-  //   }
-  //       return Observable.throw(`1`);
-  //     //return this.http.get<SearchResults<T>>(`${this.API_URL}/search/${what}`, { params });
-  // }
-  
-  // ----------------
 
   getSearchEntityNew(entityId : string) {
     return this.httpcaller.get("https://query.wikidata.org/sparql?query=PREFIX entity: <http://www.wikidata.org/entity/> SELECT ?propUrl ?propLabel ?valUrl ?valLabel ?picture WHERE { hint:Query hint:optimizer 'None' . {    BIND(entity:"+entityId+" AS ?valUrl) . BIND('N/A' AS ?propUrl ) . BIND('identity'@en AS ?propLabel ) . } UNION {    entity:"+entityId+" ?propUrl ?valUrl . ?property ?ref ?propUrl . ?property rdf:type wikibase:Property . ?property rdfs:label ?propLabel } ?valUrl rdfs:label ?valLabel FILTER (LANG(?valLabel) = 'en') . OPTIONAL{ ?valUrl wdt:P18 ?picture .} FILTER (lang(?propLabel) = 'en' ) } ORDER BY ?propUrl ?valUrl LIMIT 200&format=json")

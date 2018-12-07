@@ -27,7 +27,7 @@ export class CheckerComponent implements OnInit {
   
   refresh_template(result:string){
     var quizrt_renewal_object = new QuizRTTemplate();
-    console.log(result+"-----------------------")
+    console.log("-RESULT-: "+result)
     quizrt_renewal_object.CategoryName="";
     quizrt_renewal_object.TopicName="";
     quizrt_renewal_object.Text=result;

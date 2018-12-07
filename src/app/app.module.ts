@@ -9,7 +9,7 @@ import { GeneratorComponent } from './generator/generator.component';
 import { HomeComponent } from './home/home.component';
 import { CheckerComponent } from './checker/checker.component';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+// import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   declarations: [
@@ -22,8 +22,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    AngularFontAwesomeModule
+    FormsModule
+    // AngularFontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
