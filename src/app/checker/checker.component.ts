@@ -9,7 +9,7 @@ import { QuizRTTemplate, Questions, Options } from '../generator/generator.model
   encapsulation: ViewEncapsulation.None,
 })
 export class CheckerComponent implements OnInit {
-
+  sample:boolean = false;
   constructor( private wikidata : WikidataService) { }
 sample_questions =[];
   ngOnInit() {
@@ -17,12 +17,24 @@ sample_questions =[];
   }
 
   listTemplate :any={}
+  get_first_ten :any=[];
+  checkLoader : number = 0;
+  unlock_sample()
+  {
+    this.sample=!this.sample;
+  }
 
+
+  get_10(result:any=[]){
+    this.checkLoader = 1;
+    this.get_first_ten = result;
+    console.log(this.get_first_ten[0].question+"---------------");
+  }
   getAllTemplate(){
     this.wikidata.getAllTempalte().subscribe(
       data => { 
         this.listTemplate = data;
-        console.log(this.listTemplate[0].single_Question);
+        console.log(this.listTemplate[0].coressponding_questions);
       }
     )
   }

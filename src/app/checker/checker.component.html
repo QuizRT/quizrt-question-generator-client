@@ -1,29 +1,97 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
-<div class="container">
-  <app-back></app-back>
-  <h4>List Of Templates: 
-    <i class="fas fa-info-circle example-button" 
-      matTooltip="Click To Regenerate Question On Templates Again."
-      matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
-  </h4>
-  <div *ngFor = "let result of listTemplate" class="list-group">
-    <button (click)="refresh_template(result.template)" class="list-group-item list-group-item-action">
-      <div id="question">
-          {{ result.single_Question.question }}
-      </div>
-          <ul  id="correctOption">
-              <li >
-                  {{ result.single_Question.correctOption }}
-              </li>
-          </ul>
-      <!-- <div id="otherOptions" *ngFor = "let op of result.single_Question.otherOptionsList"> -->
-        <ul *ngFor = "let op of result.single_Question.otherOptionsList">
-          <li id="otherOptions">
-            {{op.option}}
-          </li>
-      </ul>
-      <!-- </div> -->
-    </button>
+<div class="quizmaster-c-container">
+
+  <!-- Left Side -->
+  <div class="quizmaster-ch-side__container">
+
+    <nav class="">
+      <a [routerLink]="['/']">
+        <h5 class="quizmaster-c-side__container__title">Quiz Master</h5>
+      </a>
+    </nav>
+
+    <div class="quizmaster-ch-side__title">
+      <h4>List Of Templates: 
+        <i class="fas fa-info-circle example-button" 
+          matTooltip="Click To View More Question On The These Templates."
+          matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
+      </h4>
+    </div>
+    <table class="table table-hover table-dark mt-3">
+      <thead>
+        <tr><th scope="col">Generated Questions Samples</th></tr>
+      </thead>
+      <tbody *ngFor = "let result of listTemplate">
+        <tr (click) ="get_10(result.coressponding_questions)">
+          <td>
+            <li >
+              {{ result.single_Question.question }}
+              <div class="quizmaster-regenrate">
+                <div class="quizmaster-regenrate-options">
+                  <ul style="margin-bottom: 0px;">
+                    <li>
+                      {{ result.single_Question.correctOption }}
+                    </li>
+                  </ul>
+                  <ul>
+                    <li *ngFor="let op of result.single_Question.otherOptionsList">
+                      {{ op.option }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="quizmaster-regenrate-div-button">
+                  <button (click)="refresh_template(result.template)" class="last-button list-group-item list-group-item-action">Regenerate Questions</button>
+                </div>
+              </div>
+              <!-- <button (click)="refresh_template(result.template)" class="list-group-item list-group-item-action">asd</button> -->
+              <!-- <button >Get_10_Questions</button> -->
+            </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
+  <!-- End of Left Side -->
+
+  <!-- Right Side -->
+  <div class="quizmaster-ch-editor">
+    <div *ngIf="checkLoader == 0" class="quizrt-c-question__loader">
+      <img class="quizrt-c-question__image" src="./assets/img/gameplay-loader.gif" alt="" srcset="">
+      <h5 class="quizrt-c-question__msg quizrt-c-text">Click Sample To View More Questions</h5>
+    </div>
+    <div *ngIf="checkLoader == 1">
+      <table class="table table-hover table-dark mt-3">
+        <thead>
+          <tr><th scope="col">Some Questions On Selected Templates</th></tr>
+        </thead>
+        <tbody *ngFor = "let result of get_first_ten">
+          <tr>
+            <td>
+              <li >
+                {{ result.question }}
+                <ul style="margin-bottom: 0px;">
+                  <li>
+                      {{ result.correctOption }}
+                  </li>
+                </ul>
+                <ul>
+                  <li *ngFor = "let result1 of result.otherOptionsList">
+                      {{result1.option}}
+                  </li>
+                </ul>
+                <!-- <button (click)="refresh_template(result.template)" class="list-group-item list-group-item-action">asd</button> -->
+                <!-- <button >Get_10_Questions</button> -->
+              </li>
+            </td>
+          </tr>
+          <!-- <button (click)="refresh_template(result.template)" type="submit" class="btn btn-warning">Generate Sample Questions</button> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- End of Right Side -->
+  
 </div>
+

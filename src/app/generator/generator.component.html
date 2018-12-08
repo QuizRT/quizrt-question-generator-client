@@ -15,10 +15,10 @@
         <thead>
           <tr><th scope="col">Sample of Curated Questions</th></tr>
         </thead>
-        <tbody>
+        <tbody  *ngFor="let result of questionObject">
           <tr>
             <td>
-              <li *ngFor="let result of questionObject">
+              <li>
                 {{ result.QuestionGiven }}
                 <ul>
                   <li *ngFor="let option of result.Options">
@@ -45,7 +45,7 @@
       <mat-form-field class="quizmaster-c-search__textbox" appearance="outline">
         <mat-label>Search For Entities</mat-label>
         <input matInput type="text" id="inputAddress" [(ngModel)]='subject'/>
-        <mat-hint>Entities can be Cricketers, Monuments</mat-hint>
+        <mat-hint>Entities can be City, Monuments etc. Eg. Kolkata</mat-hint>
       </mat-form-field>
       <div class="quizmaster-c-search__btn__wrapper">
         <button class="quizmaster-c-search__btn" mat-button (click)="searchObject()" type="submit">Search</button>
