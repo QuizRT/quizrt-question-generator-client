@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-generator',
   templateUrl: './generator.component.html',
-  styleUrls: ['./generator.component.scss'],
+  styleUrls: ['./generator.component.css'],
   // Need to remove view encapsulation so that the custom tooltip style defined in
   // `tooltip-custom-class-example.css` will not be scoped to this component's view.
   encapsulation: ViewEncapsulation.None,
@@ -83,7 +83,7 @@ export class GeneratorComponent implements OnInit {
           for(let i = 0; i < this.searchEntity$.entities[entityId].claims.P106.length; i++) {
             this.occupation.push(this.searchEntity$.entities[entityId].claims.P106[i])
           }
-          
+
           for(let i in this.occupation) {
             this.wikidata.getSearchEntity(this.occupation[i].mainsnak.datavalue.value.id).subscribe(
               data => {
@@ -97,7 +97,7 @@ export class GeneratorComponent implements OnInit {
                   })
                   break
                 }
-                  
+
               }
             );
           }
@@ -123,7 +123,7 @@ export class GeneratorComponent implements OnInit {
     this.wikidata.generateEntityQuesOption(this.sparQL).subscribe(
       data => {
         this.getQuestion$ = data;
-        for(let i=0; i < this.getQuestion$.results.bindings.length; i++){          
+        for(let i=0; i < this.getQuestion$.results.bindings.length; i++){
 
           this.sparQL = "SELECT ?cid ?options WHERE {?cid wdt:P31 wd:Q28640. OPTIONAL {?cid rdfs:label ?options filter (lang(?options) = 'en') . }}Limit "+this.NumberOfQuestions*20+"";
           // Subscribing to get related Options based on clicked Topic for each generated sample Question
@@ -138,12 +138,12 @@ export class GeneratorComponent implements OnInit {
               ques.Options = this.randomizeOptions(this.getOptions$.results.bindings,entityValue)
               // console.log(ques.Options)
               this.queryQues.push(ques)
-            } 
+            }
           )
-          
+
         }
         // console.log(this.queryQues)
-      } 
+      }
     )
 
   }
@@ -219,13 +219,13 @@ export class GeneratorComponent implements OnInit {
   // -----------------------------------------
 
   quesTemp : number = 0
-  searchEntityCheck : number = 0  
+  searchEntityCheck : number = 0
   searchPropertyCheck : number = 0
   generateQuesCheck : number = 0
 
   arrOfGeneral = []
   instanceOfValue : string = ""
-  
+
   template : string = ""
   getSampleQuestion$: any={}
   questionObject = []
@@ -243,7 +243,7 @@ export class GeneratorComponent implements OnInit {
     this.searchPropertyCheck = 1
     this.generateQuesCheck = 0
     this.quesTemp = 0
-    
+
     this.arrOfGeneral = []
 
     this.wikidata.getSearchEntityNew(entityId).subscribe(
@@ -272,10 +272,10 @@ export class GeneratorComponent implements OnInit {
   // for generating Sample Questions for user review
   generateQuesReviewNew(currentSubjectId : string, currentSubject : string) {
     console.log("Inside - generateQuesReviewNew: "+" currentSubjectId-"+currentSubjectId+" currentSubject-"+currentSubject)
-    
+
     this.quesTemp = 0
     this.generateQuesCheck = 0
-    
+
     this.category = currentSubject
     this.categoryId = currentSubjectId
     // console.log(this.categoryId)
@@ -323,7 +323,7 @@ export class GeneratorComponent implements OnInit {
 
           }
         }
-      } 
+      }
     )
   }
 
@@ -343,7 +343,7 @@ export class GeneratorComponent implements OnInit {
       this.template.lastIndexOf(")")
     )
     for(let i=0; i < this.getSampleQuestion$.results.bindings.length; i++) {
-      if(!(this.getSampleQuestion$.results.bindings[i].cidLabel.value[0] == 'Q' && 
+      if(!(this.getSampleQuestion$.results.bindings[i].cidLabel.value[0] == 'Q' &&
               /^\d+$/.test(this.getSampleQuestion$.results.bindings[i].cidLabel.value.substring(1)) )) {
         var ques = new Questions()
         ques.QuestionGiven = this.template

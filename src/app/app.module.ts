@@ -13,6 +13,8 @@ import { BackComponent } from './back/back.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material';
 import { MatTooltipModule , MatProgressSpinnerModule, MatSnackBarModule } from '@angular/material';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 import { from } from 'rxjs';
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
@@ -34,6 +36,8 @@ import { from } from 'rxjs';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatButtonModule,
+    MatInputModule,
+    MatTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

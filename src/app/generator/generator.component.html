@@ -1,36 +1,130 @@
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
-
-<div class="container">
-  <app-back></app-back>
-  <div class="form-group">
-      <label for="inputAddress"><h4>Subject</h4></label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Burj Khalifa" [(ngModel)]='subject'>
+<div class="quizmaster-l-container">
+  <!-- Left Side -->
+  <div class="quizmaster-c-side__container">
+    <nav class="">
+      <a [routerLink]="['/']">
+        <h5 class="quizmaster-c-side__container__title">Quiz Master</h5>
+      </a>
+    </nav>
+    <div class="" *ngIf = "generateQuesCheck != 2">
+      No questions generated yet.
+    </div>
+    <div *ngIf = "generateQuesCheck == 2" class="container">
+      <table class="table table-hover table-dark mt-3">
+        <thead>
+          <tr><th scope="col">Sample of Curated Questions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <li *ngFor="let result of questionObject">
+                {{ result.QuestionGiven }}
+                <ul>
+                  <li *ngFor="let option of result.Options">
+                    {{ option.OptionGiven }}
+                  </li>
+                </ul>
+              </li>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button (click)="generateQuesPostNew()" type="submit" class="btn btn-warning">Generate Questions</button>
+    </div>
   </div>
-  <button (click)="searchObject()" type="submit" class="btn btn-warning">Search</button>
+  <!-- End of Left Side -->
+
+  <!-- Right Side -->
+  <div class="quizmaster-c-editor">
+    <h3>Question Generation</h3>
+
+    <!-- Step-1 Subject Identification -->
+    <div>Subject Identification</div>
+    <div class="quizmaster-c-search">
+      <mat-form-field class="quizmaster-c-search__textbox" appearance="outline">
+        <mat-label>Search For Entities</mat-label>
+        <input matInput type="text" id="inputAddress" [(ngModel)]='subject'/>
+        <mat-hint>Entities can be Cricketers, Monuments</mat-hint>
+      </mat-form-field>
+      <div class="quizmaster-c-search__btn__wrapper">
+        <button class="quizmaster-c-search__btn" mat-button (click)="searchObject()" type="submit">Search</button>
+      </div>
+    </div>
+
+    <div *ngIf = "searchEntityCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+
+    <div *ngIf = "searchEntityCheck == 2" class="quizmaster-c-found__entities">
+      <h5>Found few entites matching: <span class="quizmaster-c-bold">{{subject}}</span></h5>
+
+      <table class="quizmaster-c-table table table-hover table-dark mt-3">
+        <thead>
+          <tr>
+            <th scope="col">Entities</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody *ngFor = "let result of searchObject$.search">
+          <tr (click)="searchEntityNew(result.id)">
+            <td>{{ result.label }}</td>
+            <td>{{ result.description }}</td>
+            <!-- <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-warning">Go</button></td> -->
+            <!-- <td><button (click)="searchEntityNew(result.id)" type="submit" class="btn btn-warning">Go</button></td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf = "searchPropertyCheck == 1">
+      <mat-spinner style="margin:0 auto;"></mat-spinner>
+    </div>
+
+    <div *ngIf = "searchPropertyCheck == 2">
+      <div>
+        Selected <span class="quizmaster-c-bold">{{topic}}</span> as the Subject. Listing all the properties of <span class="quizmaster-c-bold">{{topic}}</span>
+      </div>
+      <table class="table table-hover table-dark mt-3">
+        <thead>
+          <tr>
+            <th scope="col">Property</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="generateQuesReviewNew(result.SubjectId,result.Subject)" *ngFor="let result of arrOfGeneral">
+            <td>{{ result.Subject }}</td>
+            <td>{{ result.Value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf = "quesTemp == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+
+    <div *ngIf = "quesTemp == 2" class="container">
+      <div class="form-group">
+        <label for="inputAddress">
+          <h5>Type your question
+            <i class="fas fa-info-circle example-button"
+              matTooltip="Replace 'option' in (option) with the Property selected in last step and keep [subject] as it is. Example: 1. What is the (country) of [subject]? 2. When was the [subject] (born)?"
+              matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
+          </h5>
+        </label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
+      </div>
+      <button (click)="searchTemplate()" type="submit" class="btn btn-warning">Generate Sample Questions</button>
+    </div>
+
+    <div *ngIf = "generateQuesCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
+
+  </div>
+  <!-- End of Right Side -->
 </div>
-<div *ngIf = "searchEntityCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
-<div *ngIf = "searchEntityCheck == 2" class="container">
-    <table class="table table-hover table-dark mt-3">
-      <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Label</th>
-          <th scope="col">Description</th>
-          <th scope="col">Select</th>
-        </tr>
-      </thead>
-      <tbody *ngFor = "let result of searchObject$.search">
-        <tr>
-          <td>{{ result.id }}</td>
-          <td>{{ result.label }}</td>
-          <td>{{ result.description }}</td>
-          <!-- <td><button (click)="searchEntity(result.id)" type="submit" class="btn btn-warning">Go</button></td> -->
-          <td><button (click)="searchEntityNew(result.id)" type="submit" class="btn btn-warning">Go</button></td>
-        </tr>
-      </tbody>
-    </table>
-</div>
+
+
+
+
+
 <!-- <div *ngIf = "selector == 'human' " class="container">
     <table class="table table-hover table-dark mt-3">
       <thead>
@@ -76,63 +170,6 @@
     </table>
     <button (click)="generateQuesPost(queryQues)" type="submit" class="btn btn-warning">Generate Questions</button>
 </div> -->
-<div *ngIf = "searchPropertyCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
-<div *ngIf = "searchPropertyCheck == 2" class="container">
-    <table class="table table-hover table-dark mt-3">
-      <thead>
-        <tr>
-          <th scope="col">P Property</th>
-          <th scope="col">Q Details</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let result of arrOfGeneral">
-          <td>{{ result.Subject }}</td>
-          <td>
-              {{ result.Value }}
-              <button (click)="generateQuesReviewNew(result.SubjectId,result.Subject)" type="submit" class="btn btn-warning">Go</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-</div>
-<div *ngIf = "quesTemp == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
-<div *ngIf = "quesTemp == 2" class="container">
-  <div class="form-group">
-      <label for="inputAddress">
-        <h5>Template (Type as: "Who is the (option) of [subject]?")
-          <i class="fas fa-info-circle example-button" 
-            matTooltip="Replace 'option' in (option) with the Property selected in last step and keep [subject] as it is. Example: 1. What is the (country) of [subject]? 2. When was the [subject] (born)?"
-           matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
-        </h5>
-      </label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Who is the (option) of [subject]?" [(ngModel)]='template'>
-  </div>
-  <button (click)="searchTemplate()" type="submit" class="btn btn-warning">Search</button>
-</div>
-<div *ngIf = "generateQuesCheck == 1"><mat-spinner style="margin:0 auto;"></mat-spinner></div>
-<div *ngIf = "generateQuesCheck == 2" class="container">
-    <table class="table table-hover table-dark mt-3">
-      <thead>
-        <tr>
-          <th scope="col">Sample Questions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-              <li *ngFor="let result of questionObject">
-                {{ result.QuestionGiven }}
-                <ul>
-                  <li *ngFor="let option of result.Options">
-                    {{ option.OptionGiven }}
-                 </li>
-                </ul>
-              </li>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button (click)="generateQuesPostNew()" type="submit" class="btn btn-warning">Generate Questions</button>
-</div>
+
+
 <!-- <div *ngIf = "questionPostSuccess == true" class="loading-indicator"><mat-spinner></mat-spinner></div> -->

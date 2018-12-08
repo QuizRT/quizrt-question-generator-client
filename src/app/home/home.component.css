@@ -1,5 +1,6 @@
 .quizmaster-c-container {
   height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   color: #18113b;
