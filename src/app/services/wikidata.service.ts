@@ -47,7 +47,8 @@ export class WikidataService {
   }
 
   generate_Number_of_questions() {
-    return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/questions');
+    return this.httpcaller.get(this.APIEndPoint+'/questions')
+    // return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/questions');
   }
 
 }
