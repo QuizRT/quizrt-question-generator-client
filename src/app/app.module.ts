@@ -11,6 +11,7 @@ import { CheckerComponent } from './checker/checker.component';
 import { BackComponent } from './back/back.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material';
 import { MatTooltipModule , MatProgressSpinnerModule, MatSnackBarModule } from '@angular/material';
 import { from } from 'rxjs';
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -31,7 +32,8 @@ import { from } from 'rxjs';
     BrowserAnimationsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
