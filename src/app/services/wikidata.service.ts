@@ -46,4 +46,8 @@ export class WikidataService {
     return this.httpcaller.get("https://query.wikidata.org/sparql?query=PREFIX entity: <http://www.wikidata.org/entity/> SELECT ?propUrl ?propLabel ?valUrl ?valLabel ?picture WHERE { hint:Query hint:optimizer 'None' . {    BIND(entity:"+entityId+" AS ?valUrl) . BIND('N/A' AS ?propUrl ) . BIND('identity'@en AS ?propLabel ) . } UNION {    entity:"+entityId+" ?propUrl ?valUrl . ?property ?ref ?propUrl . ?property rdf:type wikibase:Property . ?property rdfs:label ?propLabel } ?valUrl rdfs:label ?valLabel FILTER (LANG(?valLabel) = 'en') . OPTIONAL{ ?valUrl wdt:P18 ?picture .} FILTER (lang(?propLabel) = 'en' ) } ORDER BY ?propUrl ?valUrl LIMIT 200&format=json")
   }
 
+  generate_Number_of_questions() {
+    return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/questions');
+  }
+
 }
