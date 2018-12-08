@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { WikidataService } from '../services/wikidata.service';
 import { QuizRTTemplate, Questions, Options } from '../generator/generator.model';
+
 @Component({
   selector: 'app-checker',
   templateUrl: './checker.component.html',
-  styleUrls: ['./checker.component.scss']
+  styleUrls: ['./checker.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class CheckerComponent implements OnInit {
 
