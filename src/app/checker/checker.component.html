@@ -1,6 +1,12 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
 <div class="container">
   <app-back></app-back>
-  <h4>List Of Templates: </h4>
+  <h4>List Of Templates: 
+    <i class="fas fa-info-circle example-button" 
+      matTooltip="Click To Regenerate Question On Templates Again."
+      matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip"></i>
+  </h4>
   <div *ngFor = "let result of listTemplate" class="list-group">
     <button (click)="refresh_template(result.template)" class="list-group-item list-group-item-action">
       <div id="question">

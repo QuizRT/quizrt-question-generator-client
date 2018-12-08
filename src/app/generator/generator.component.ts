@@ -4,7 +4,7 @@ import { QuizRTTemplate, Questions, Options, General } from './generator.model';
 import { fakeAsync } from '@angular/core/testing';
 import { strictEqual } from 'assert';
 import { environment } from '../../environments/environment';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 
 @Component({
