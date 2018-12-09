@@ -10,8 +10,8 @@ export class WikidataService {
   APIEndPoint = environment.APIEndPoint;
   url : string = 'http://172.23.238.164:7000/questiongenerator/';
   getAllTempalte() {
-    // return this.httpcaller.get(this.APIEndPoint+'/templates');
-    return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
+    return this.httpcaller.get(this.APIEndPoint+'/templates');
+    // return this.httpcaller.get('http://172.23.238.164:7001/api/quizrt/templates');
     // return this.httpcaller.get('http://172.23.238.164:7000/questiongenerator/templates');
     // return this.httpcaller.get('http://172.23.238.164:8080/api/quizrt/templates');
   }   
